@@ -1,0 +1,67 @@
+{
+"name": "México",
+"id":"MX",
+"long":"102.11", 
+"lat":"22.22",
+"timezone":"GMT +6",
+"level":"country" 
+}
+
+{
+"id":"CDMX",
+"name":"Ciudad de México",
+"long":"102.11", 
+"lat":"22.22",
+"timezone":"GMT +6"
+"level":"city"
+"id_country":"MX"
+}
+
+{
+"id": "Tac",
+"name":"Tacubaya",
+"long":"101.13",
+"lat":"103.13",
+"timezone":"GMT +6"
+"level":"station"
+"id_country":"MX"
+"id_city":"CDMX"
+}
+{
+"id":"MTY",
+"name":"Monterrey",
+"long":"102.11", 
+"lat":"22.22",
+"timezone":"GMT +6"
+"level":"city"
+"id_country":"MX"
+}
+
+{
+"id": "Camp",
+"name":"Cerro de la Campana",
+"long":"101.13",
+"lat":"103.13",
+"timezone":"GMT +6"
+"level":"station"
+"id_country":"MX"
+"id_city":"MTY"
+}
+
+
+
+{ 
+	"method_id": "met1",
+	"method_short-description":"Esta es una descripción chida",
+	"method_protocol":"Pasito 1, Pasito 2, Pasito tun tun",
+	"method_device":"Supermaquinón 2"
+}
+
+{
+	"station_id":"Tac"
+	"pollutant_id":"CO2",
+	"pollutant_unit":"ug",
+	"pollutant_update_time":"10/12/2014",
+	"pollutant_averaging":"5 min",
+	"pollutant_value":"36"
+}
