@@ -17,7 +17,7 @@ import pandas as pd
 import numpy as np
 import requests
 import json
-import datetime
+from datetime import datetime
 import city_twitts
 
 UPLOAD_FOLDER = 'uploads'
