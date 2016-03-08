@@ -29,7 +29,7 @@ class MyServer(Flask):
             super(MyServer, self).__init__(*args, **kwargs)
 
             #instanciate your variables here
-            self.update_twitts_time = datetime.now
+            self.update_twitts_time = datetime.now()
             self.accounts = [{"city":"MXMEX","account":"RespiraDF"}]
             self.twitts = city_twitts.get_cities_tweets(self.accounts)
 
@@ -415,11 +415,10 @@ def indicator():
 @app.route('/twitts', methods=['GET'])
 def twitts():
     city = request.args.get('city_id')
-    current_time = datetime.now
-    print(app.update_twitts_time)
+    current_time = datetime.now()
     update_delta = current_time - app.update_twitts_time
     if update_delta > datetime.timedelta(hours=1):
-        app.update_twitts_time = datetime.now
+        app.update_twitts_time = datetime.now()
         app.twitts = city_twitts.get_cities_tweets(app.accounts)
     if city is None:
         content = app.twitts
