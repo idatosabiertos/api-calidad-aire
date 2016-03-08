@@ -416,10 +416,11 @@ def indicator():
 def twitts():
     city = request.args.get('city_id')
     current_time = datetime.now
+    print(app.update_twitts_time)
     update_delta = current_time - app.update_twitts_time
     if update_delta > datetime.timedelta(hours=1):
         app.update_twitts_time = datetime.now
-        app.twitts = city_twitts.get_cities_tweets(self.accounts)
+        app.twitts = city_twitts.get_cities_tweets(app.accounts)
     if city is None:
         content = app.twitts
     else:
