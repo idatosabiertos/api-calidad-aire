@@ -415,10 +415,10 @@ def indicator():
 @app.route('/twitts', methods=['GET'])
 def twitts():
     city = request.args.get('city_id')
-    current_time = datetime.datetime.now()()
+    current_time = datetime.datetime.now()
     update_delta = current_time - app.update_twitts_time
     if update_delta > datetime.timedelta(hours=1):
-        app.update_twitts_time = datetime.datetime.now()()
+        app.update_twitts_time = datetime.datetime.now()
         app.twitts = city_twitts.get_cities_tweets(app.accounts)
     if city is None:
         content = app.twitts
