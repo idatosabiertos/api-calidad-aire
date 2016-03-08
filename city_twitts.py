@@ -7,6 +7,7 @@ token = os.environ.get('token')
 token_key = os.environ.get('token_key')
 
 def get_twitts(account):
+    t = Twitter(auth=OAuth(token, token_key, con_secret, con_secret_key))
     twitts = t.statuses.user_timeline(screen_name=account)[0:3]
     twitt_list = []
     for  twitt in  twitts:
