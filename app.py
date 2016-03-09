@@ -363,7 +363,7 @@ def indicator():
     filetype = request.args.get('filetype')
     if now is None:
         now = 0
-    if filetype = None:
+    if filetype == None:
         filetype = "json"
     regex_construction = "^" + greographical_zone
     documents_by_zone = []
