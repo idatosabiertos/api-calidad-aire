@@ -419,6 +419,7 @@ def indicator():
     response_dict["pollutants"] = pollutants_timelines
     response_dict["geographical_zone"] = greographical_zone
     response_dict["dateUnit"] = dateUnit
+    response_out = json.dumps(response_dict)
     mimetype_out = "application/json"
     if filetype == "csv":
         check = 0
@@ -435,10 +436,10 @@ def indicator():
         cols.insert(0, cols.pop(cols.index('time')))
         df_total = df_total.reindex(columns= cols)
 
-        response_dict = df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL)
+        response_out = df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL)
         mimetype_out = 'text/csv'
 
-    return Response(response=json.dumps(response_dict), status=200, mimetype=mimetype_out)
+    return Response(response=response_out, status=200, mimetype=mimetype_out)
 
 
 @app.route('/twitts', methods=['GET'])
