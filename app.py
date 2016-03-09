@@ -363,6 +363,8 @@ def indicator():
     filetype = request.args.get('filetype')
     if now is None:
         now = 0
+    if filetype = None:
+        filetype = "json"
     regex_construction = "^" + greographical_zone
     documents_by_zone = []
     for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}):
@@ -421,6 +423,7 @@ def indicator():
     response_dict["dateUnit"] = dateUnit
     response_out = json.dumps(response_dict)
     mimetype_out = "application/json"
+    print(filetype)
     if filetype == "csv":
         check = 0
         for pollutant in response_dict["pollutants"]:
