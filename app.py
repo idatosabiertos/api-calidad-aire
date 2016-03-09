@@ -19,6 +19,7 @@ import requests
 import json
 import datetime
 import city_twitts
+import csv
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['zip'])
@@ -359,6 +360,7 @@ def indicator():
     greographical_zone = request.args.get('geographical_zone')
     dateUnit = request.args.get('dateUnit')
     now = request.args.get('now')
+    filetype = request.args.get('filetype')
     if now is None:
         now = 0
     regex_construction = "^" + greographical_zone
@@ -417,9 +419,26 @@ def indicator():
     response_dict["pollutants"] = pollutants_timelines
     response_dict["geographical_zone"] = greographical_zone
     response_dict["dateUnit"] = dateUnit
-    print(response_dict)
+    mimetype_out = "application/json"
+    if filetype == "csv":
+        check = 0
+        for pollutant in response_dict["pollutants"]:
+            df= pd.DataFrame.from_dict(pollutant["timeline"])
+            df=df.rename(columns = {'value':pollutant["pollutant"]+"_value",'normalized':pollutant["pollutant"]+"_normalized"})
+            if check == 0:
+                df_total = df
+                check=1
+            else:
+                df_total = pd.merge(df_total, df, how='outer', on='time')
 
-    return Response(response=json.dumps(response_dict), status=200, mimetype="application/json")
+        cols = df_total.columns.tolist()
+        cols.insert(0, cols.pop(cols.index('time')))
+        df_total = df_total.reindex(columns= cols)
+
+        response_dict = df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL)
+        mimetype_out = 'text/csv'
+
+    return Response(response=json.dumps(response_dict), status=200, mimetype=mimetype_out)
 
 
 @app.route('/twitts', methods=['GET'])
