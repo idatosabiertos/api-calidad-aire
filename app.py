@@ -439,7 +439,7 @@ def indicator():
         cols.insert(0, cols.pop(cols.index('time')))
         df_total = df_total.reindex(columns= cols)
 
-        response_out = df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL)
+        response_out = df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL, index_label = False)
         mimetype_out = 'text/csv'
 
     return Response(response=response_out, status=200, mimetype=mimetype_out)
