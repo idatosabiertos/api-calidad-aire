@@ -128,7 +128,8 @@ class CityResource(Resource):
 class StationResource(Resource):
     document = Station
     filters = {
-        'city_id': [ops.Exact, ops.Startswith]
+        'name': [ops.Exact, ops.Startswith],
+        'city_id': [ops.Exact, ops.Startswith],
     }
 
 class MethodResource(Resource):
