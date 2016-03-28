@@ -382,7 +382,8 @@ def indicator():
     pollutants_df = np.unique(geo_data["pollutant_id"])
     response_dict = {}
     pollutants_timelines = []
-    pollutant_normalization = {"PM25": 25.0, "PM10": 50.0, "O3":50.0, "NO2":106.38 , "SO2": 190.83}
+    pollutant_normalization = {"PM25": 25.0, "PM10": 50.0, "O3":50.0, "NO2":106.38 , "SO2": 190.83, "CO": 34.78}
+    #Queda pendiente mejorar la normalizacion considerando las restricciones del peso.
     for pollutant in pollutants_df:
         pollutant_dict = {}
         pollutant_dict["pollutant"] = pollutant
