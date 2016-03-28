@@ -128,8 +128,6 @@ class CityResource(Resource):
 class StationResource(Resource):
     document = Station
     filters = {
-        'name': [ops.Exact, ops.Startswith],
-        'local': [ops.Exact, ops.Startswith],
         'city_id': [ops.Exact, ops.Startswith]
     }
 
