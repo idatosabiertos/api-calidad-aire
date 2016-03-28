@@ -404,7 +404,6 @@ def indicator():
                     normalized_data = mean_time_frame["pollutant_value"]/normalizing_value
                 except:
                     normalized_data = "nan"
-
                 timeframe_dict = {"time": time_frame, "value": str(mean_time_frame["pollutant_value"]), "normalized":str(normalized_data)}
                 timeline.append(timeframe_dict)
         else:
@@ -417,9 +416,23 @@ def indicator():
                 normalized_data = "nan"
             timeframe_dict = {"time": time_frame, "value": str(mean_time_frame["pollutant_value"]), "normalized":str(normalized_data)}
             timeline.append(timeframe_dict)
-
         pollutant_dict["timeline"] = timeline
         pollutants_timelines.append(pollutant_dict)
+    ##Generate Max Pollutant measure.
+    max_measurement_dictionary = {}
+    for pollutant in pollutants_timelines:
+        for time in pollutant["timeline"]:
+            if time["normalized"] != "nan":
+                if max_measurement_dictionary.has_key(time["time"]):
+                    if time["normalized"] > max_measurement_dictionary["time"]["normalized"]:
+                        max_measurement_dictionary["time"]["normalized"] = time["normalized"]
+    #Enters only if this time has not been initialized
+                else:
+                    max_measurement_dictionary["time"]["normalized"] = time["normalized"]
+    max_measurement_timeline = [{"time": time, "normalized": max_measurement_dictionary[time]} for time in max_measurement_dictionary.keys()]
+    max_pollutant_dict = { "pollutant": "max", "unit": "None", "timeline": max_measurement_timeline}
+    pollutants_timelines.append(max_pollutant_dict)
+
     response_dict["pollutants"] = pollutants_timelines
     response_dict["geographical_zone"] = greographical_zone
     response_dict["dateUnit"] = dateUnit
