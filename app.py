@@ -130,6 +130,7 @@ class StationResource(Resource):
     filters = {
         'name': [ops.Exact, ops.Startswith],
         'city_id': [ops.Exact],
+        'station_id': [ops.Exact]
     }
 
 class MethodResource(Resource):
