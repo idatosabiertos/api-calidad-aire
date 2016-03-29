@@ -421,14 +421,14 @@ def indicator():
     ##Generate Max Pollutant measure.
     max_measurement_dictionary = {}
     for pollutant in pollutants_timelines:
-        for time in pollutant["timeline"]:
-            if time["normalized"] != "nan":
-                if max_measurement_dictionary.has_key(time["time"]):
-                    if time["normalized"] > max_measurement_dictionary["time"]:
-                        max_measurement_dictionary["time"] = time["normalized"]
+        for time_space in pollutant["timeline"]:
+            if time_space["normalized"] != "nan":
+                if max_measurement_dictionary.has_key([time_space["time"]]):
+                    if float(time_space["normalized"]) > float(max_measurement_dictionary["time"]):
+                        max_measurement_dictionary[time_space["time"]] = time_space["normalized"]
     #Enters only if this time has not been initialized
                 else:
-                    max_measurement_dictionary["time"]["normalized"] = time["normalized"]
+                    max_measurement_dictionary[[time_space["time"]]]["normalized"] = time["normalized"]
     max_measurement_timeline = [{"time": time, "normalized": max_measurement_dictionary[time]} for time in max_measurement_dictionary.keys()]
     max_pollutant_dict = { "pollutant": "max", "unit": "None", "timeline": max_measurement_timeline}
     pollutants_timelines.append(max_pollutant_dict)
