@@ -359,6 +359,7 @@ def extract_time(api_time, time_unit):
 @app.route('/cities-pollutant-timeline', methods=['GET'])
 def indicator():
     MAX_TIMELINE_LEN = 50
+    QUERY_LIMIT = 1000
     greographical_zone = request.args.get('geographical_zone')
     dateUnit = request.args.get('dateUnit')
     now = request.args.get('now')
@@ -369,7 +370,7 @@ def indicator():
         filetype = "json"
     regex_construction = "^" + greographical_zone
     documents_by_zone = []
-    for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}):
+    for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).limit(1000):
         geo_local_dict = {}
         geo_local_dict['pollutant_id'] = cursor["pollutant_id"]
         geo_local_dict['pollutant_unit'] = cursor["pollutant_unit"]
