@@ -424,7 +424,7 @@ def indicator():
         for time_space in pollutant["timeline"]:
             print(time_space)
             if time_space["normalized"] != "nan":
-                if max_measurement_dictionary.has_key([time_space["time"]]):
+                if max_measurement_dictionary.has_key(time_space["time"]):
                     if float(time_space["normalized"]) > float(max_measurement_dictionary["time"]):
                         max_measurement_dictionary[time_space["time"]] = time_space["normalized"]
     #Enters only if this time has not been initialized
