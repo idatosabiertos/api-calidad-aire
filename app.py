@@ -8,7 +8,7 @@ from flask.ext.mongorest.resources import Resource
 from flask.ext.mongorest import operators as ops
 from flask.ext.mongorest import methods
 from werkzeug import secure_filename
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 import os
 import string
 import random
