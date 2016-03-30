@@ -340,7 +340,8 @@ def extract_time(api_time, time_unit):
         "month":  7,
         "day": 10,
         "hour": 13,
-        "minute": 16
+        "minute": 16,
+        "undefined": 10 #Behave per day by default
     }
     try:
         return_time = api_time[0:stop_position[time_unit]]
