@@ -358,6 +358,7 @@ def extract_time(api_time, time_unit):
 
 @app.route('/cities-pollutant-timeline', methods=['GET'])
 def indicator():
+    MAX_TIMELINE_LEN = 50
     greographical_zone = request.args.get('geographical_zone')
     dateUnit = request.args.get('dateUnit')
     now = request.args.get('now')
@@ -416,7 +417,7 @@ def indicator():
                 normalized_data = "nan"
             timeframe_dict = {"time": time_frame, "value": str(mean_time_frame["pollutant_value"]), "normalized":str(normalized_data)}
             timeline.append(timeframe_dict)
-        pollutant_dict["timeline"] = timeline
+        pollutant_dict["timeline"] = timeline[0:MAX_TIMELINE_LEN]
         pollutants_timelines.append(pollutant_dict)
     ##Generate Max Pollutant measure.
     max_measurement_dictionary = {}
@@ -424,14 +425,13 @@ def indicator():
         for time_space in pollutant["timeline"]:
             if time_space["normalized"] != "nan":
                 if max_measurement_dictionary.has_key(time_space["time"]):
-                    print(max_measurement_dictionary[time_space["time"]])
                     if float(time_space["normalized"]) > float(max_measurement_dictionary[time_space["time"]][0]):
                         max_measurement_dictionary[time_space["time"]] = [time_space["normalized"] , pollutant["pollutant"]]
     #Enters only if this time has not been initialized
                 else:
                     max_measurement_dictionary[time_space["time"]] = [time_space["normalized"],pollutant["pollutant"]]
     max_measurement_timeline = [{"time": time, "normalized": max_measurement_dictionary[time][0], "pollutant": max_measurement_dictionary[time][1]} for time in max_measurement_dictionary.keys()]
-    max_pollutant_dict = { "pollutant": "max", "unit": "None", "timeline": max_measurement_timeline}
+    max_pollutant_dict = { "pollutant": "max", "unit": "None", "timeline": max_measurement_timeline[0:MAX_TIMELINE_LEN]}
     pollutants_timelines.append(max_pollutant_dict)
 
     response_dict["pollutants"] = pollutants_timelines
