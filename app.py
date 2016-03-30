@@ -429,6 +429,7 @@ def indicator():
                         max_measurement_dictionary[time_space["time"]] = time_space["normalized"]
     #Enters only if this time has not been initialized
                 else:
+                    max_measurement_dictionary[time_space["time"]] = {}
                     max_measurement_dictionary[time_space["time"]]["normalized"] = time_space["normalized"]
     max_measurement_timeline = [{"time": time, "normalized": max_measurement_dictionary[time]} for time in max_measurement_dictionary.keys()]
     max_pollutant_dict = { "pollutant": "max", "unit": "None", "timeline": max_measurement_timeline}
