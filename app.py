@@ -422,7 +422,6 @@ def indicator():
     max_measurement_dictionary = {}
     for pollutant in pollutants_timelines:
         for time_space in pollutant["timeline"]:
-            print(time_space)
             if time_space["normalized"] != "nan":
                 if max_measurement_dictionary.has_key(time_space["time"]):
                     print(max_measurement_dictionary[time_space["time"]])
