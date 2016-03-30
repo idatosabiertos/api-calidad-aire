@@ -370,7 +370,7 @@ def indicator():
         filetype = "json"
     regex_construction = "^" + greographical_zone
     documents_by_zone = []
-    for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).sort(('_id', DESCENDING)).limit(QUERY_LIMIT):
+    for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).sort([('_id', DESCENDING)]).limit(QUERY_LIMIT):
         geo_local_dict = {}
         geo_local_dict['pollutant_id'] = cursor["pollutant_id"]
         geo_local_dict['pollutant_unit'] = cursor["pollutant_unit"]
