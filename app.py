@@ -8,7 +8,7 @@ from flask.ext.mongorest.resources import Resource
 from flask.ext.mongorest import operators as ops
 from flask.ext.mongorest import methods
 from werkzeug import secure_filename
-from pymongo import MongoClient, ASCENDING
+from pymongo import MongoClient, DESCENDING
 import os
 import string
 import random
@@ -371,7 +371,7 @@ def indicator():
         filetype = "json"
     regex_construction = "^" + greographical_zone
     documents_by_zone = []
-    for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).sort([('pollutant_update_time', ASCENDING)]).limit(QUERY_LIMIT):
+    for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).sort([('pollutant_update_time', DESCENDING)]).limit(QUERY_LIMIT):
         geo_local_dict = {}
         geo_local_dict['pollutant_id'] = cursor["pollutant_id"]
         geo_local_dict['pollutant_unit'] = cursor["pollutant_unit"]
