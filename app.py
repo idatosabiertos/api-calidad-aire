@@ -361,22 +361,16 @@ def extract_time(api_time, time_unit):
 def indicator():
     MAX_TIMELINE_LEN = 50
     QUERY_LIMIT = 1000
-
-    #Get parameters
     greographical_zone = request.args.get('geographical_zone')
     dateUnit = request.args.get('dateUnit')
     now = request.args.get('now')
     filetype = request.args.get('filetype')
-
-    #Fill none types.
     if now is None:
         now = 0
     if filetype == None:
         filetype = "json"
     regex_construction = "^" + greographical_zone
     documents_by_zone = []
-
-    #Query the data from Mongo.
     for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).sort([('pollutant_update_time', DESCENDING)]).limit(QUERY_LIMIT):
         geo_local_dict = {}
         geo_local_dict['pollutant_id'] = cursor["pollutant_id"]
@@ -386,25 +380,17 @@ def indicator():
         geo_local_dict['pollutant_update_time'] = trunc_time
         geo_local_dict['station_id'] = cursor["station_id"]
         documents_by_zone.append(geo_local_dict)
-
-    #Convert data to Pandas, for easy operations.
-    #Prepare data.
     geo_data = pd.DataFrame(documents_by_zone)
     geo_data['pollutant_value'] = geo_data['pollutant_value'].astype('float')
     pollutants_df = np.unique(geo_data["pollutant_id"])
-
-    #Prepare for Timeline Filling
     response_dict = {}
     pollutants_timelines = []
     pollutant_normalization = {"PM25": 25.0, "PM10": 50.0, "O3":50.0, "NO2":106.38 , "SO2": 190.83, "CO": 34.78}
     #Queda pendiente mejorar la normalizacion considerando las restricciones del peso.
-    max_measurement_dictionary = {}
-    #Iterate over unique pollutants
     for pollutant in pollutants_df:
         pollutant_dict = {}
         pollutant_dict["pollutant"] = pollutant
         pollutant_data = geo_data[(geo_data["pollutant_id"] == pollutant)]
-        #Get normalization constant
         try:
             normalizing_value = float(pollutant_normalization[str(pollutant)])
         except:
@@ -412,7 +398,6 @@ def indicator():
         pollutant_dict["unit"] = np.unique(pollutant_data["pollutant_unit"])[0]
         timeline = []
         time_frames = np.unique(geo_data['pollutant_update_time'])
-        #Start timelines
         if int(now) == 0:
             for time_frame in time_frames:
                 time_frame_data = pollutant_data[(pollutant_data["pollutant_update_time"] == time_frame)]
@@ -420,11 +405,6 @@ def indicator():
                 try:
                     mean_time_frame = time_frame_data[["pollutant_value"]].mean()
                     normalized_data = mean_time_frame["pollutant_value"]/normalizing_value
-                    if max_measurement_dictionary.has_key(time_frame):
-                        if normalized_data > float(max_measurement_dictionary[time_frame][0]):
-                            max_measurement_dictionary[time_frame] = [normalized_data , pollutant]
-                    else:
-                        max_measurement_dictionary[time_frame] = [normalized_data , pollutant]
                 except:
                     normalized_data = "nan"
                 timeframe_dict = {"time": time_frame, "value": str(mean_time_frame["pollutant_value"]), "normalized":str(normalized_data)}
@@ -435,11 +415,6 @@ def indicator():
             mean_time_frame = time_frame_data[["pollutant_value"]].mean()
             try:
                 normalized_data = mean_time_frame["pollutant_value"]/normalizing_value
-                if max_measurement_dictionary.has_key(time_frame):
-                    if normalized_data > float(max_measurement_dictionary[time_frame][0]):
-                        max_measurement_dictionary[time_frame] = [normalized_data , pollutant]
-                    else:
-                        max_measurement_dictionary[time_frame] = [normalized_data , pollutant]
             except:
                 normalized_data = "nan"
             timeframe_dict = {"time": time_frame, "value": str(mean_time_frame["pollutant_value"]), "normalized":str(normalized_data)}
@@ -447,6 +422,16 @@ def indicator():
         pollutant_dict["timeline"] = timeline[0:MAX_TIMELINE_LEN]
         pollutants_timelines.append(pollutant_dict)
     ##Generate Max Pollutant measure.
+    max_measurement_dictionary = {}
+    for pollutant in pollutants_timelines:
+        for time_space in pollutant["timeline"]:
+            if time_space["normalized"] != "nan":
+                if max_measurement_dictionary.has_key(time_space["time"]):
+                    if float(time_space["normalized"]) > float(max_measurement_dictionary[time_space["time"]][0]):
+                        max_measurement_dictionary[time_space["time"]] = [time_space["normalized"] , pollutant["pollutant"]]
+    #Enters only if this time has not been initialized
+                else:
+                    max_measurement_dictionary[time_space["time"]] = [time_space["normalized"],pollutant["pollutant"]]
     max_measurement_timeline = [{"time": time, "normalized": max_measurement_dictionary[time][0], "pollutant": max_measurement_dictionary[time][1]} for time in max_measurement_dictionary.keys()]
     max_pollutant_dict = { "pollutant": "max", "unit": "None", "timeline": max_measurement_timeline[0:MAX_TIMELINE_LEN]}
     pollutants_timelines.append(max_pollutant_dict)
@@ -474,6 +459,7 @@ def indicator():
 
         response_out = df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL, index= False)
         mimetype_out = 'text/csv'
+
     return Response(response=response_out, status=200, mimetype=mimetype_out)
 
 
