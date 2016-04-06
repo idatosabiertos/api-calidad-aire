@@ -372,14 +372,9 @@ def indicator():
     regex_construction = "^" + greographical_zone
     documents_by_zone = []
     for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).sort([('pollutant_update_time', DESCENDING)]).limit(QUERY_LIMIT):
-        geo_local_dict = {}
-        geo_local_dict['pollutant_id'] = cursor["pollutant_id"]
-        geo_local_dict['pollutant_unit'] = cursor["pollutant_unit"]
-        geo_local_dict['pollutant_value'] = cursor["pollutant_value"]
         trunc_time = extract_time(cursor["pollutant_update_time"], dateUnit)
-        geo_local_dict['pollutant_update_time'] = trunc_time
-        geo_local_dict['station_id'] = cursor["station_id"]
-        documents_by_zone.append(geo_local_dict)
+        cursor['pollutant_update_time'] = trunc_time
+        documents_by_zone.append(cursor)
     geo_data = pd.DataFrame(documents_by_zone)
     geo_data['pollutant_value'] = geo_data['pollutant_value'].astype('float')
     pollutants_df = np.unique(geo_data["pollutant_id"])
