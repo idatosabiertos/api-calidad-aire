@@ -374,9 +374,9 @@ def indicator():
     for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).sort([('pollutant_update_time', DESCENDING)]).limit(QUERY_LIMIT):
         trunc_time = extract_time(cursor["pollutant_update_time"], dateUnit)
         cursor['pollutant_update_time'] = trunc_time
+        cursor['pollutant_value'] = float(cursor['pollutant_value'])
         documents_by_zone.append(cursor)
     geo_data = pd.DataFrame(documents_by_zone)
-    geo_data['pollutant_value'] = geo_data['pollutant_value'].astype('float')
     pollutants_df = np.unique(geo_data["pollutant_id"])
     response_dict = {}
     pollutants_timelines = []
