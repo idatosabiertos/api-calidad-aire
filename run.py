@@ -4,4 +4,4 @@ from app import app
 
 app.config['PROFILE'] = True
 app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
-app.run(host='0.0.0.0', port=port, debug = "true", threaded="true")
+app.run(host='0.0.0.0', port=8000, debug = "true", threaded="true")
