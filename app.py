@@ -414,7 +414,7 @@ def indicator():
         if int(now) != 0:
             time_frames = [time_uniques[0]]
         for time_frame in time_frames:
-            if time_frame in pollutants_values_by_time[pollutant]
+            if time_frame in pollutants_values_by_time[pollutant]:
                 time_frame_data = pollutants_values_by_time[pollutant][time_frame]
                 if "nan" in time_frame_data: time_frame_data.remove("nan")
                 try:
