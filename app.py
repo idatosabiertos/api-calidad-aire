@@ -419,7 +419,7 @@ def indicator():
                 normalized_data = mean_time_frame/normalizing_value
             except:
                 normalized_data = "nan"
-                timeframe_dict = {"time": time_frame, "value": str(mean_time_frame["pollutant_value"]), "normalized":str(normalized_data)}
+                timeframe_dict = {"time": time_frame, "value": str(mean_time_frame), "normalized":str(normalized_data)}
                 timeline.append(timeframe_dict)
         pollutant_dict["timeline"] = timeline[0:MAX_TIMELINE_LEN]
         pollutants_timelines.append(pollutant_dict)
