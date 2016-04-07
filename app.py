@@ -408,8 +408,8 @@ def indicator():
         timeline = []
         time_frames = pollutants_values_by_time[pollutant].keys()
         print(time_frames)
-        if now != 0:
-            time_frames = time_frames[-1]
+        if int(now) != 0:
+            time_frames = [time_frames[-1]]
         for time_frame in time_frames:
             print(pollutant,time_frame)
             time_frame_data = pollutants_values_by_time[pollutant][time_frame]
