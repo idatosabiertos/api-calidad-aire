@@ -411,6 +411,7 @@ def indicator():
         if now != 0:
             time_frames = time_frames[-1]
         for time_frame in time_frames:
+            print(pollutant,time_frame)
             time_frame_data = pollutants_values_by_time[pollutant][time_frame]
             time_frame_data = time_frame_data.remove("nan")
             try:
