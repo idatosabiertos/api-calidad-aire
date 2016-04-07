@@ -392,7 +392,6 @@ def indicator():
              pollutant_units[cursor['pollutant_id']] = cursor['pollutant_unit']
 
     pollutants_df = pollutants_values_by_time.keys()
-    print(pollutants_df)
     response_dict = {}
     pollutants_timelines = []
     pollutant_normalization = {"PM25": 25.0, "PM10": 50.0, "O3":50.0, "NO2":106.38 , "SO2": 190.83, "CO": 34.78}
@@ -408,6 +407,7 @@ def indicator():
         pollutant_dict["unit"] = pollutant_units[pollutant]
         timeline = []
         time_frames = pollutants_values_by_time[pollutant].keys()
+        print(time_frames)
         if now != 0:
             time_frames = time_frames[-1]
         for time_frame in time_frames:
