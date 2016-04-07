@@ -410,11 +410,10 @@ def indicator():
             normalizing_value = "nan"
         pollutant_dict["unit"] = pollutant_units[pollutant]
         timeline = []
-        time_frames = pollutants_values_by_time[pollutant].keys()
         if int(now) != 0:
-            time_frames = [time_uniques[0]]
-        for time_frame in time_frames:
-            if time_frame in pollutants_values_by_time[pollutant]:
+            time_uniques = [time_uniques[0]]
+        for time_frame in time_uniques:
+            try:
                 time_frame_data = pollutants_values_by_time[pollutant][time_frame]
                 if "nan" in time_frame_data: time_frame_data.remove("nan")
                 try:
@@ -422,7 +421,7 @@ def indicator():
                     normalized_data = mean_time_frame/normalizing_value
                 except:
                     normalized_data = "nan"
-            else:
+            except:
                 mean_time_frame = "nan"
                 normalized_data = "nan"
             timeframe_dict = {"time": time_frame, "value": str(mean_time_frame), "normalized":str(normalized_data)}
