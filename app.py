@@ -413,7 +413,7 @@ def indicator():
         for time_frame in time_frames:
             print(pollutant,time_frame)
             time_frame_data = pollutants_values_by_time[pollutant][time_frame]
-            time_frame_data = time_frame_data.remove("nan")
+            if "nan" in time_frame_data: time_frame_data.remove("nan")
             try:
                 mean_time_frame = sum(time_frame_data) / float(len(time_frame_data))
                 normalized_data = mean_time_frame/normalizing_value
