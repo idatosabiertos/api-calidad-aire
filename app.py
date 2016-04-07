@@ -404,7 +404,7 @@ def indicator():
         pollutant_dict["unit"] = pollutant_units[pollutant]
         timeline = []
         time_frames = pollutants_values_by_time[pollutant].keys()
-        if now = 1:
+        if now != 0:
             time_frames = time_frames[-1]
         for time_frame in time_frames:
             time_frame_data = pollutants_values_by_time[pollutant][time_frame]
