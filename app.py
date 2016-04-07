@@ -376,7 +376,7 @@ def indicator():
     pollutants_values_by_time = {}
     pollutant_units = {}
     time_uniques = []
-    for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).batch_size(1000).limit(20000):
+    for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).batch_size(1000).limit(10000):
           trunc_time = extract_time(cursor["pollutant_update_time"], dateUnit)
           cursor['pollutant_update_time'] = trunc_time
           try:
