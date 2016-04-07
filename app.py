@@ -395,7 +395,7 @@ def indicator():
              pollutant_units[cursor['pollutant_id']] = cursor['pollutant_unit']
           if trunc_time not in time_uniques:
              time_uniques.append(trunc_time)
-    time_uniques = sorted(time_uniques, reversed=True)
+    time_uniques = sorted(time_uniques, reverse=True)
     pollutants_df = pollutants_values_by_time.keys()
     response_dict = {}
     pollutants_timelines = []
