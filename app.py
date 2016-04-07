@@ -410,14 +410,13 @@ def indicator():
         for time_frame in time_frames:
             time_frame_data = pollutants_values_by_time[pollutant][time_frame]
             if "nan" in time_frame_data: time_frame_data.remove("nan")
-            print(time_frame_data)
             try:
                 mean_time_frame = sum(time_frame_data) / float(len(time_frame_data))
                 normalized_data = mean_time_frame/normalizing_value
             except:
                 normalized_data = "nan"
-                timeframe_dict = {"time": time_frame, "value": str(mean_time_frame), "normalized":str(normalized_data)}
-                timeline.append(timeframe_dict)
+            timeframe_dict = {"time": time_frame, "value": str(mean_time_frame), "normalized":str(normalized_data)}
+            timeline.append(timeframe_dict)
         pollutant_dict["timeline"] = timeline[0:MAX_TIMELINE_LEN]
         pollutants_timelines.append(pollutant_dict)
     ##Generate Max Pollutant measure.
