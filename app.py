@@ -20,6 +20,7 @@ import json
 import datetime
 import city_twitts
 import csv
+from dateutil import parser
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['zip'])
@@ -58,6 +59,28 @@ def add_cors_headers(response):
             response.headers['Access-Control-Allow-Headers'] = headers
     return response
 app.after_request(add_cors_headers)
+
+
+def arrange_strings_as_dates(incoming_list, reverse = True):
+    index_dict = {}
+    for idx, date in enumerate(incoming_list):
+        index_dict[idx+1] = date
+    arrangeable_list = []
+    keeper_dict= {}
+    for key in index_dict.keys():
+        print(index_dict)
+        value_parsed = parser.parse(index_dict[key])
+        keeper_dict[value_parsed] = key
+        arrangeable_list.append(value_parsed)
+    arranged_list = sorted(arrangeable_list, reverse=True)
+    arranged_pos = []
+    for date in arranged_list:
+        arranged_pos.append(keeper_dict[date])
+    ordered_list = []
+    for i in arranged_pos:
+        ordered_list.append(index_dict[i])
+    return ordered_list
+
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -405,8 +428,9 @@ def indicator():
         pollutant_dict["unit"] = pollutant_units[pollutant]
         timeline = []
         time_frames = pollutants_values_by_time[pollutant].keys()
+        time_frames = arrange_strings_as_dates(time_frames)
         if int(now) != 0:
-            time_frames = [time_frames[-1]]
+            time_frames = [time_frames[0]]
         for time_frame in time_frames:
             time_frame_data = pollutants_values_by_time[pollutant][time_frame]
             if "nan" in time_frame_data: time_frame_data.remove("nan")
