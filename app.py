@@ -380,13 +380,18 @@ def indicator():
               cursor['pollutant_value'] = float(cursor['pollutant_value'])
           except:
               cursor['pollutant_value'] = "nan"
-          if trunc_time in pollutants_values_by_time[cursor['pollutant_id']]:
-              pollutants_values_by_time[cursor['pollutant_id']][trunc_time].append(cursor['pollutant_value'])
+          if cursor['pollutant_id'] in pollutants_values_by_time:
+              if trunc_time in pollutants_values_by_time[cursor['pollutant_id']]:
+                  pollutants_values_by_time[cursor['pollutant_id']][trunc_time].append(cursor['pollutant_value'])
+              else:
+                  pollutants_values_by_time[cursor['pollutant_id']][trunc_time] = {}
+                  pollutants_values_by_time[cursor['pollutant_id']][trunc_time] = [cursor['pollutant_value']]  
           else:
-              pollutants_values_by_time[cursor['pollutant_id']]= {}
-              pollutants_values_by_time[cursor['pollutant_id']][trunc_time] = [cursor['pollutant_value']]
+             pollutants_values_by_time[cursor['pollutant_id']]= {}
+             pollutants_values_by_time[cursor['pollutant_id']][trunc_time] = {}
+             pollutants_values_by_time[cursor['pollutant_id']][trunc_time] = [cursor['pollutant_value']]
           if cursor['pollutant_id'] not in pollutant_units:
-              pollutant_units[cursor['pollutant_id']] = cursor['pollutant_unit']
+             pollutant_units[cursor['pollutant_id']] = cursor['pollutant_unit']
 
     pollutants_df = pollutants_values_by_time.keys()
     response_dict = {}
