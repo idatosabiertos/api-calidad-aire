@@ -375,6 +375,7 @@ def indicator():
     documents_by_zone = []
     pollutants_values_by_time = {}
     pollutant_units = {}
+    time_uniques = []
     for cursor in db_query.pollutant.find({'station_id':{'$regex': regex_construction}}).sort([('pollutant_update_time', DESCENDING)]).limit(QUERY_LIMIT):
           trunc_time = extract_time(cursor["pollutant_update_time"], dateUnit)
           cursor['pollutant_update_time'] = trunc_time
@@ -392,6 +393,9 @@ def indicator():
              pollutants_values_by_time[cursor['pollutant_id']][trunc_time] = [cursor['pollutant_value']]
           if cursor['pollutant_id'] not in pollutant_units:
              pollutant_units[cursor['pollutant_id']] = cursor['pollutant_unit']
+          if cursor[trunc_time] not in time_uniques:
+             time_uniques.append(trunc_time)
+    time_uniques = sorted(time_uniques, reversed=True)
     pollutants_df = pollutants_values_by_time.keys()
     response_dict = {}
     pollutants_timelines = []
@@ -407,16 +411,19 @@ def indicator():
         pollutant_dict["unit"] = pollutant_units[pollutant]
         timeline = []
         time_frames = pollutants_values_by_time[pollutant].keys()
-        time_frames = sorted(time_frames, reverse=True)
         if int(now) != 0:
-            time_frames = [time_frames[0]]
+            time_frames = [time_uniques[0]]
         for time_frame in time_frames:
-            time_frame_data = pollutants_values_by_time[pollutant][time_frame]
-            if "nan" in time_frame_data: time_frame_data.remove("nan")
-            try:
-                mean_time_frame = sum(time_frame_data) / float(len(time_frame_data))
-                normalized_data = mean_time_frame/normalizing_value
-            except:
+            if time_frame in pollutants_values_by_time[pollutant]
+                time_frame_data = pollutants_values_by_time[pollutant][time_frame]
+                if "nan" in time_frame_data: time_frame_data.remove("nan")
+                try:
+                    mean_time_frame = sum(time_frame_data) / float(len(time_frame_data))
+                    normalized_data = mean_time_frame/normalizing_value
+                except:
+                    normalized_data = "nan"
+            else:
+                mean_time_frame = "nan"
                 normalized_data = "nan"
             timeframe_dict = {"time": time_frame, "value": str(mean_time_frame), "normalized":str(normalized_data)}
             timeline.append(timeframe_dict)
