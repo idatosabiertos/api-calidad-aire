@@ -360,7 +360,7 @@ def extract_time(api_time, time_unit):
 @app.route('/cities-pollutant-timeline', methods=['GET'])
 def indicator():
     MAX_TIMELINE_LEN = 50
-    QUERY_LIMIT = 100000
+    QUERY_LIMIT = 10000
     greographical_zone = request.args.get('geographical_zone')
     dateUnit = request.args.get('dateUnit')
     now = request.args.get('now')
