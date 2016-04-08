@@ -24,6 +24,7 @@ from dateutil import parser
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['zip'])
+CURRENT_HOST = "http://104.197.214.72:8000"
 
 class MyServer(Flask):
 
@@ -229,7 +230,7 @@ def upload_file():
             #Paises
             if "countries.csv" in files_in_folder:
                 countries_df =pd.DataFrame.from_csv(filepath+"/countries.csv",index_col=False)
-                current_countries = get_data_per_key("http://104.197.214.72:8000/countries/", "country_id")
+                current_countries = get_data_per_key(CURRENT_HOST + "/countries/", "country_id")
                 for index, row in countries_df.iterrows():
                     if row['country_id'] not in current_countries:
                         local_dict = {
@@ -240,12 +241,12 @@ def upload_file():
                             "timezone" : str(row["country_timezone"]),
                             "level" : str("country")
                         }
-                        send_local_dict("http://104.197.214.72:8000/countries/", local_dict)
+                        send_local_dict(CURRENT_HOST + "/countries/", local_dict)
 
             #ciudades
             if "cities.csv" in files_in_folder:
                 cities_df =pd.DataFrame.from_csv(filepath+"/cities.csv",index_col=False)
-                current_cities = get_data_per_key("http://104.197.214.72:8000/cities/", "city_id")
+                current_cities = get_data_per_key(CURRENT_HOST + "/cities/", "city_id")
                 for index, row in cities_df.iterrows():
                     if row['city_id'] not in current_cities:
                         local_dict = {
@@ -257,11 +258,11 @@ def upload_file():
                             "level" : "city",
                             "country_id" : str(row["country_id"])
                         }
-                        send_local_dict("http://104.197.214.72:8000/cities/", local_dict)
+                        send_local_dict(CURRENT_HOST + "/cities/", local_dict)
             #estaciones
             if "stations.csv" in files_in_folder:
                 stations_df =pd.DataFrame.from_csv(filepath+"/stations.csv",index_col=False)
-                current_stations = get_data_per_key("http://104.197.214.72:8000/stations/", "station_id")
+                current_stations = get_data_per_key(CURRENT_HOST + "/stations/", "station_id")
                 for index, row in stations_df.iterrows():
                     print(row)
                     if row['station_id'] not in current_stations:
@@ -276,12 +277,12 @@ def upload_file():
                             "city_id" : str(row["city_id"]),
                             "local" : str(row["station_local"])
                         }
-                        send_local_dict("http://104.197.214.72:8000/stations/", local_dict)
+                        send_local_dict(CURRENT_HOST + "/stations/", local_dict)
 
             #metodos
             if "methods.csv" in files_in_folder:
                 methods_df =pd.DataFrame.from_csv(filepath+"/methods.csv",index_col=False)
-                current_methods = get_data_per_key("http://104.197.214.72:8000/methods/", "method_id")
+                current_methods = get_data_per_key(CURRENT_HOST + "/methods/", "method_id")
                 for index, row in methods_df.iterrows():
                     if row['method_id'] not in current_methods:
                         local_dict = {
@@ -290,7 +291,7 @@ def upload_file():
                             "method_protocol" : str(row["method_protocol"]),
                             "method_device" : str(row["method_device"])
                         }
-                        send_local_dict("http://104.197.214.72:8000/methods/", local_dict)
+                        send_local_dict(CURRENT_HOST + "/methods/", local_dict)
 
             ##Empieza Subida Naive
             #contaminantes
@@ -306,7 +307,7 @@ def upload_file():
                         "pollutant_averaging" : str(row["pollutant_averaging"]),
                         "pollutant_value" : str(row["pollutant_value"])
                     }
-                    send_local_dict("http://104.197.214.72:8000/pollutants/", local_dict)
+                    send_local_dict(CURRENT_HOST + "/pollutants/", local_dict)
 
             #Datos del feed
             if "feed_info.csv" in files_in_folder:
@@ -319,7 +320,7 @@ def upload_file():
                         "feed_publishername" : str(row["feed_publisher-name"]),
                         "feed_startdate" : str(row["feed_start-date"])
                     }
-                    send_local_dict("http://104.197.214.72:8000/feeds/", local_dict)
+                    send_local_dict(CURRENT_HOST + "/feeds/", local_dict)
 
             return Response(response=json.dumps([{"data":"OK"}]), status=200, mimetype="application/json")
 
