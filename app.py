@@ -24,7 +24,7 @@ from dateutil import parser
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['zip'])
-CURRENT_HOST = "http://104.197.214.72:8000"
+CURRENT_HOST = "http://localhost:8000"
 
 class MyServer(Flask):
 
