@@ -4,7 +4,8 @@ mimerender
 python-dateutil
 sphinx
 cleancat>=0.3
-Flask
-Flask-Views
-Flask-WTF==0.8.4
+flask
+flask-Views
+flask-WTF==0.8.4
 pymongo<3.0
+twitter
