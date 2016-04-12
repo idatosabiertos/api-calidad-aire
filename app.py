@@ -9,6 +9,7 @@ from flask.ext.mongorest import operators as ops
 from flask.ext.mongorest import methods
 from werkzeug import secure_filename
 from pymongo import MongoClient, DESCENDING
+from StringIO import StringIO
 import os
 import string
 import random
@@ -463,8 +464,9 @@ def indicator():
         cols = df_total.columns.tolist()
         cols.insert(0, cols.pop(cols.index('time')))
         df_total = df_total.reindex(columns= cols)
-
-        response_out = df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL, index= False)
+        output_io = StringIO()
+        df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL, index= False)
+        response_out = output_io.getvalue()
         mimetype_out = 'text/csv'
 
     return Response(response=response_out, status=200, mimetype=mimetype_out)
