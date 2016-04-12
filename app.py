@@ -39,25 +39,11 @@ app = MyServer(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-mongo_host = os.environ.get('OPENSHIFT_MONGODB_DB_HOST')
-mongo_port = os.environ.get('OPENSHIFT_MONGODB_DB_PORT')
-mongo_db = "api_calidad_del_aire"
-mongo_user = os.environ.get('OPENSHIFT_MONGODB_DB_USERNAME')
-mongo_password = os.environ.get('OPENSHIFT_MONGODB_DB_PASSWORD')
+app.config.update(
+    MONGODB_HOST = 'localhost',
+    MONGODB_PORT = '27017',
+    MONGODB_DB = 'api_calidad_del_aire')
 
-if mongo_host is None:
-    app.config.update(
-        MONGODB_HOST = 'localhost',
-        MONGODB_PORT = '27017',
-        MONGODB_DB = 'api_calidad_del_aire')
-
-else:
-    app.config.update(
-        MONGODB_HOST = mongo_host,
-        MONGODB_PORT = mongo_port,
-        MONGODB_DB = mongo_db,
-        MONGODB_USER = mongo_user,
-        MONGODB_PASSWORD = mongo_password)
 
 db = MongoEngine(app)
 api = MongoRest(app)
