@@ -465,7 +465,7 @@ def indicator():
         cols.insert(0, cols.pop(cols.index('time')))
         df_total = df_total.reindex(columns= cols)
         output_io = StringIO()
-        df_total.to_csv(path_or_buf = None, quoting = csv.QUOTE_ALL, index= False)
+        df_total.to_csv(path_or_buf = output_io, quoting = csv.QUOTE_ALL, index= False)
         response_out = output_io.getvalue()
         mimetype_out = 'text/csv'
 
