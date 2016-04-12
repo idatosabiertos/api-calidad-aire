@@ -23,7 +23,7 @@ import csv
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['zip'])
-CURRENT_HOST = "http://localhost"
+CURRENT_HOST = "http://localhost:8000"
 
 class MyServer(Flask):
 
