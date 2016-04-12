@@ -1,5 +1,6 @@
 -e git://github.com/closeio/mongoengine.git#egg=mongoengine-dev
 -e git://github.com/closeio/flask-mongoengine.git#egg=flask-mongoengine
+-e git://github.com/sixohsix/twitter.git
 mimerender
 python-dateutil
 sphinx
