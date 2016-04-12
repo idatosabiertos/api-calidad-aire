@@ -20,11 +20,10 @@ import json
 import datetime
 import city_twitts
 import csv
-from dateutil import parser
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['zip'])
-CURRENT_HOST = "http://localhost:8000"
+CURRENT_HOST = "http://localhost"
 
 class MyServer(Flask):
 
@@ -39,17 +38,33 @@ class MyServer(Flask):
 app = MyServer(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-app.config.update(
-    MONGODB_HOST = 'localhost',
-    MONGODB_PORT = '27017',
-    MONGODB_DB = 'api_calidad_del_aire',
-)
+
+mongo_host = os.environ.get('OPENSHIFT_MONGODB_DB_HOST')
+mongo_port = os.environ.get('OPENSHIFT_MONGODB_DB_PORT')
+mongo_db = "api_calidad_del_aire"
+mongo_user = os.environ.get('OPENSHIFT_MONGODB_DB_USERNAME')
+mongo_password = os.environ.get('OPENSHIFT_MONGODB_DB_PASSWORD')
+
+if mongo_host is None:
+    app.config.update(
+        MONGODB_HOST = 'localhost',
+        MONGODB_PORT = '27017',
+        MONGODB_DB = 'api_calidad_del_aire')
+
+else:
+    app.config.update(
+        MONGODB_HOST = mongo_host,
+        MONGODB_PORT = mongo_port,
+        MONGODB_DB = mongo_db,
+        MONGODB_USER = mongo_user,
+        MONGODB_PASSWORD = mongo_password)
 
 db = MongoEngine(app)
 api = MongoRest(app)
 
-client = MongoClient()
-db_query = client.api_calidad_del_aire
+connection = MongoClient(mongo_host, int(mongo_port))
+db_query = connection["api_calidad_del_aire"]
+db_query.authenticate(mongo_user, mongo_password,mechanism='MONGODB-CR')
 
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
@@ -358,7 +373,6 @@ def extract_time(api_time, time_unit):
         return_time = date_array[0] + "-s"+ wk
     return return_time
 
-    dt = datetime.date(2010, 6, 16)
 
 @app.route('/cities-pollutant-timeline', methods=['GET'])
 def indicator():
@@ -484,7 +498,6 @@ def twitts():
     else:
         content = app.twitts[city]
     return Response(response=json.dumps(content), status=200, mimetype="application/json")
-
 
 
 if __name__ == "__main__":
