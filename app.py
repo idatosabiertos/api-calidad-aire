@@ -48,9 +48,8 @@ app.config.update(
 db = MongoEngine(app)
 api = MongoRest(app)
 
-connection = MongoClient(mongo_host, int(mongo_port))
-db_query = connection["api_calidad_del_aire"]
-db_query.authenticate(mongo_user, mongo_password,mechanism='MONGODB-CR')
+client = MongoClient()
+db_query = client.api_calidad_del_aire
 
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
