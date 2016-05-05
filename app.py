@@ -442,7 +442,7 @@ def indicator():
                 else:
                     max_measurement_dictionary[time_space["time"]] = [time_space["normalized"],pollutant["pollutant"]]
     max_measurement_timeline = [{"time": time, "normalized": max_measurement_dictionary[time][0], "pollutant": max_measurement_dictionary[time][1]} for time in max_measurement_dictionary.keys()]
-    max_measurement_timeline = sorted(max_measurement_timeline, key=lambda k: datetime.datetime.strptime(k['name'], "%Y-%m-%dT%H:%M:%S" ), reverse=True)
+    max_measurement_timeline = sorted(max_measurement_timeline, key=lambda k: datetime.datetime.strptime(k['time'], "%Y-%m-%dT%H:%M:%S" ), reverse=True)
     max_pollutant_dict = { "pollutant": "max", "unit": "None", "timeline": max_measurement_timeline[0:MAX_TIMELINE_LEN]}
     pollutants_timelines.append(max_pollutant_dict)
 
