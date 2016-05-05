@@ -421,7 +421,7 @@ def indicator():
                 if "nan" in time_frame_data: time_frame_data.remove("nan")
                 try:
                     mean_time_frame = sum(time_frame_data) / float(len(time_frame_data))
-                    normalized_data = mean_time_frame/normalizing_value
+                    normalized_data = round(mean_time_frame/normalizing_value,2)
                 except:
                     normalized_data = "nan"
             except:
