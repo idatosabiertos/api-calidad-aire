@@ -34,7 +34,7 @@ class MyServer(Flask):
 
             #instanciate your variables here
             self.update_twitts_time = datetime.datetime.now()
-            self.accounts = [{"city":"MXMEX","account":"RespiraDF"}]
+            self.accounts = [{"city":"MXMEX","account":"RespiraCDMX"}]
             self.twitts = city_twitts.get_cities_tweets(self.accounts)
 
 app = MyServer(__name__)
