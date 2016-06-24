@@ -10,6 +10,7 @@ from flask.ext.mongorest import methods
 from werkzeug import secure_filename
 from pymongo import MongoClient, DESCENDING
 from StringIO import StringIO
+from flask import got_request_exception
 import os
 import string
 import random
@@ -22,10 +23,15 @@ import datetime
 import city_twitts
 import csv
 import dateutil.parser
+import rollbar
+import rollbar.contrib.flask
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['zip'])
 CURRENT_HOST = "http://localhost:8000"
+
+pollutant_normalization = {"PM25": 25.0, "PM10": 50.0, "O3":50.0, "NO2":106.38 , "SO2": 190.83, "CO": 34.78}
+
 
 class MyServer(Flask):
 
@@ -53,6 +59,25 @@ api = MongoRest(app)
 client = MongoClient()
 db_query = client.api_calidad_del_aire
 
+
+rollbar_key = os.environ["rollbar_key"]
+rollbar_environment = os.environ["rollbar_environment"]
+
+@app.before_first_request
+def init_rollbar():
+    print("Init rollab")
+    rollbar.init(
+        rollbar_key,
+        # environment name
+        rollbar_environment,
+        # server root directory, makes tracebacks prettier
+        root=os.path.dirname(os.path.realpath(__file__)),
+        # flask already sets up logging
+        allow_logging_basic_config=False)
+
+    got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
+
+
 def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
     if request.method == 'OPTIONS':
@@ -61,6 +86,7 @@ def add_cors_headers(response):
         if headers:
             response.headers['Access-Control-Allow-Headers'] = headers
     return response
+
 app.after_request(add_cors_headers)
 
 
@@ -402,7 +428,6 @@ def indicator():
     pollutants_df = pollutants_values_by_time.keys()
     response_dict = {}
     pollutants_timelines = []
-    pollutant_normalization = {"PM25": 25.0, "PM10": 50.0, "O3":50.0, "NO2":106.38 , "SO2": 190.83, "CO": 34.78}
     #Queda pendiente mejorar la normalizacion considerando las restricciones del peso.
     for pollutant in pollutants_df:
         pollutant_dict = {}
