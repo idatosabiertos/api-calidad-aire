@@ -1,6 +1,6 @@
 -e git://github.com/closeio/mongoengine.git#egg=mongoengine-dev
 -e git://github.com/closeio/flask-mongoengine.git#egg=flask-mongoengine
--e git://github.com/sixohsix/twitter.git
+-e git://github.com/sixohsix/twitter.git#egg=twitter
 mimerender
 python-dateutil
 sphinx
@@ -8,10 +8,9 @@ cleancat>=0.3
 flask
 flask-Views
 flask-WTF==0.8.4
-pymongo<3.0
+pymongo==2.8.1
 twitter
 pytz
 pandas
 numpy
-csv
 rollbar
