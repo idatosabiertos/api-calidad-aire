@@ -6,7 +6,7 @@ import mongoengine
 from bson.dbref import DBRef
 from bson.objectid import ObjectId
 from flask import request, url_for
-from urllib.parse import urlparse
+from urllib2  import urlparse
 from mongoengine.base.proxy import DocumentProxy
 from mongoengine.fields import EmbeddedDocumentField, ListField, ReferenceField, GenericReferenceField, SafeReferenceField
 from mongoengine.fields import DateTimeField, DictField
@@ -411,7 +411,7 @@ class Resource(object):
             # to extract the object id at this point since
             # MongoEngine only understands the object id
             if self.uri_prefix:
-                url = urlparse(value)
+                url = urlparse.urlparse(value)
                 uri = url.path
                 value = uri.lstrip(self.uri_prefix)
 
