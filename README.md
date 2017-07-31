@@ -22,3 +22,13 @@ A Restful API for [Air quality web app](https://github.com/idatosabiertos/calida
 - $`export rollbar_key=your_rollbar_key`
 - $`export rollbar_environment=your_environment`
 - $`python run.py`
+
+### Vagrant  [/vagrant](https://github.com/idatosabiertos/api-calidad-aire/tree/master/Vagrant)
+**Requerimientos / Requirements**
+ - [Vagrant](https://www.vagrantup.com/downloads.html)
+ - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+**Pasos / Steps:**
+1. `git clone https://github.com/idatosabiertos/api-calidad-aire`
+2. `cd api-calidad-aire/Vagrant`
+3. `vagrant up` 
+4. Navegar a / Navigate to `http://localhost:8000` en la maquina host / on host machine.
