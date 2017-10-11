@@ -26,10 +26,17 @@ install "Git" git
 cd /opt
 sudo mkdir idatosabiertos
 cd idatosabiertos
+
+sudo git clone https://github.com/idatosabiertos/calidad-aire-cdmx-latam
 sudo git clone https://github.com/idatosabiertos/api-calidad-aire
 
+cd calidad-aire-cdmx-latam
+pip3 install pandas
+install "zip" zip
+sudo chmod +x ./cronjob.sh 
+nohup ./cronjob.sh > /dev/null 2>&1 &
 
-cd api-calidad-aire 
+cd /opt/idatosabiertos/api-calidad-aire 
 sudo rm -rf src/flask-mongoengine
 sudo rm -rf src/mongoengine
 sudo pip install -r requirements.txt
